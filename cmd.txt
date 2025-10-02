@@ -1,0 +1,13 @@
+g++ -Ofast -flto=auto -march=native -mtune=native \
+    -fopenmp -funroll-loops -fno-math-errno -fno-trapping-math -ffp-contract=fast \
+    -DNDEBUG \
+    procon.cpp -o procon
+
+
+OMP_NUM_THREADS=16 OMP_PLACES=cores OMP_PROC_BIND=close OMP_WAIT_POLICY=active \
+taskset -c 0-15 ./procon
+
+# 1) ビルド（攻めの最適化）
+# 2) 実行（16スレ固定・コア割当・積極待機）
+
+sudo apt install nvidia-cuda-toolkit
